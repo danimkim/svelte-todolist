@@ -7,21 +7,23 @@
 
 	let newTodo = '';
 
-	let todos: Todo[] = [
-		{ id: 1, content: 'todo1', completed: false },
-		{ id: 2, content: 'todo2', completed: false },
-		{ id: 3, content: 'todo3', completed: false }
-	];
+	let todos: Todo[] = [];
+
+	let initId = 1;
 
 	const addTodo = () => {
-		todos = [...todos, { id: todos.length + 1, content: newTodo, completed: false }];
+		todos = [...todos, { id: initId++, content: newTodo, completed: false }];
 		newTodo = '';
+	};
+
+	const removeTodo = (targetId: number) => {
+		todos = todos.filter((todo) => todo.id !== targetId);
 	};
 </script>
 
 <h1>Todo List <span class="sub-title">powered by Svelte</span></h1>
 <form on:submit|preventDefault={addTodo}>
-	<input type="text" name="todo" placeholder="Add a todo" bind:value={newTodo} />
+	<input bind:value={newTodo} type="text" placeholder="Add a todo" />
 	<button type="submit">Add</button>
 </form>
 <ul>
@@ -38,6 +40,7 @@
 			<label for={todo.id.toString()} class={`${todo.completed ? 'checked' : ''}`}>
 				{todo.content}
 			</label>
+			<button type="button" class="btn-delete" on:click={() => removeTodo(todo.id)}>✖︎</button>
 		</li>
 	{/each}
 </ul>
@@ -56,5 +59,17 @@
 		transition: ease-in-out 0.1s;
 		text-decoration: line-through;
 		color: #d0d0d0;
+	}
+
+	button.btn-delete {
+		background-color: #ededed;
+		border: none;
+		border-radius: 5px;
+	}
+
+	button.btn-delete:hover {
+		transition: ease-in-out 0.1s;
+		cursor: pointer;
+		background-color: #d0d0d0;
 	}
 </style>
